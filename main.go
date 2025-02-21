@@ -65,17 +65,17 @@ func main() {
 		Addr: ":" + cfg.ServerPort,
 	}
 
-	// Initialize CORS handler
 	corsHandler := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"}, // Change this to specific domains in production
+		AllowedOrigins:   []string{"*"}, // Allow only your frontend
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type", "Authorization"}, // Customize headers if needed
-		AllowCredentials: true,                                      // Enable credentials (cookies, HTTP authentication)
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		AllowCredentials: true, // if cookies or credentials are being used
 	})
 
 	// Start API server
 	server := api.NewServer(authService, messageService, fileService, websocketService, httpServer, nil)
 	server.UseMiddleware(authMiddleware.Middleware)
+	// Use the CORS middleware
 	server.UseMiddleware(corsHandler.Handler)
 	utils.LogInfo("Starting server", zap.String("port", cfg.ServerPort))
 	if err := server.Start(cfg.ServerPort); err != nil {
