@@ -14,6 +14,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/rs/cors"
+
 	"go.uber.org/zap"
 )
 
@@ -63,9 +65,18 @@ func main() {
 		Addr: ":" + cfg.ServerPort,
 	}
 
+	// Initialize CORS handler
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"}, // Change this to specific domains in production
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"}, // Customize headers if needed
+		AllowCredentials: true,                                      // Enable credentials (cookies, HTTP authentication)
+	})
+
 	// Start API server
 	server := api.NewServer(authService, messageService, fileService, websocketService, httpServer, nil)
 	server.UseMiddleware(authMiddleware.Middleware)
+	server.UseMiddleware(corsHandler.Handler)
 	utils.LogInfo("Starting server", zap.String("port", cfg.ServerPort))
 	if err := server.Start(cfg.ServerPort); err != nil {
 		utils.LogError("Failed to start server", err)
