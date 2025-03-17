@@ -4,6 +4,10 @@ from typing import Optional, Literal
 
 
 class Config:
+    def __init__(self):
+        self.PORT = os.getenv('PORT', 8000)  # Default to '8000' if the environment variable is not set
+        self.HOST = os.getenv('HOST', '127.0.0.1')  # Default to '127.0.0.1' if the environment variable is not set
+
     """
     Configuration class for the application.
 

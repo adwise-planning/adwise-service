@@ -3,8 +3,6 @@ import uuid
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi.params import Depends
-from slowapi import Limiter
-from slowapi.util import get_remote_address
 from sqlalchemy.orm import Session
 
 from app.config import Config
@@ -15,7 +13,7 @@ from app.services import auth_service
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
-limiter = Limiter(key_func=get_remote_address)  # Rate limiter instance
+# limiter = Limiter(key_func=get_remote_address)  # Rate limiter instance
 logger = logging.getLogger(__name__)
 config = Config()  # Instantiate Config once for efficiency
 
@@ -47,8 +45,8 @@ async def register_user(register_request: models.RegisterRequest, db: Session = 
             auth_service.request_otp(db=db, request_id=request_id, phone_number=phone_number, country_code=country_code)
             message = "User registered successfully. OTP sent to phone for verification."
         elif otp_delivery_preference == models.OTPDeliveryPreference.BOTH:
-            auth_service.request_otp(email=email, phone_number=phone_number, country_code=country_code,
-                                     request_id=request_id, db=db)
+            auth_service.request_otp(db=db, request_id=request_id, country_code=country_code, phone_number=phone_number,
+                                     email=str(email))
             message = "User registered successfully. OTPs sent to email and phone for verification."
         else:
             message = "User registered successfully. OTP verification not requested."

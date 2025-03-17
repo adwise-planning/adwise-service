@@ -4,7 +4,7 @@ import secrets
 import bcrypt
 from fastapi import Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jwt import ExpiredSignatureError, InvalidTokenError, decode
+from jwt import decode, ExpiredSignatureError, InvalidTokenError
 from passlib.context import CryptContext  # For password hashing
 
 from app.config import Config

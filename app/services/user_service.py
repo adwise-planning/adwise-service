@@ -1,4 +1,3 @@
-# app/services/user_service.py
 import logging
 from datetime import datetime
 
