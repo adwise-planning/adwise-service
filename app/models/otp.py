@@ -13,7 +13,7 @@ class OTP(Base):
     user_id = Column(UUID(as_uuid=True), nullable=False, default=uuid.uuid4, index=True)
     country_code = Column(String(10), nullable=True, doc="Country code for phone number")
     phone_number = Column(String(20), nullable=True, doc="Recipient's phone number")
-    email = Column(String(255), nullable=False, index=True, doc="Recipient's email address")
+    email = Column(String(255), nullable=True, index=True, doc="Recipient's email address")
     otp_hash = Column(String(255), nullable=False, doc="Hashed OTP value")
     otp_expiry = Column(DateTime(timezone=True), nullable=False, doc="OTP expiry timestamp")
     request_type = Column(String(50), nullable=True, doc="Type of OTP request (e.g., registration, password_reset)")
