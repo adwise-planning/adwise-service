@@ -71,7 +71,8 @@ class VerifyOTP(BaseModel):
 
     @model_validator(mode='before')
     def check_email_or_phone(cls, values):
-        email, phone_number, country_code = values.get('email'), values.get('phoneNumber'), values.get('countryCode')
+        email, phone_number, country_code = values.get('email'), values.get('phone_number'), values.get('country_code')
+
         if not email and not (phone_number and country_code):
             logger.warning(
                 "Invalid request body. Either email or both phoneNumber and countryCode must be provided for OTP request.")
