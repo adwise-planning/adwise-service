@@ -2,6 +2,7 @@ import logging
 
 import uvicorn
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from app.config import Config
 from app.extensions import init_extensions, SessionLocal, configure_logging
@@ -60,6 +61,14 @@ def create_app():
 
 
 app = create_app()  # Create FastAPI application instance
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins, including localhost
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
 if __name__ == "__main__":
     # Production-ready server setup using uvicorn
